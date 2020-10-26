@@ -8,12 +8,13 @@ CONFIG_PATH="/etc/displayset"
 while [ $# -gt 1 ]; do
   case $1 in
     --cfg-path | -p ) CONFIG_PATH="$2"; shift; shift;;
-    *) shift;
+    *) shift;;
   esac
 done
 
 [ -e "${CONFIG_PATH}" ] || { echo "Displayset config dir not found !"; exit 1; }
 
+CONFIGURED_OUTPUTS="";
 for CONFIG in $(find "${CONFIG_PATH}" -maxdepth 1 -type f -name "*.cfg" -printf '%p '); do
   DISPLAY_OUTPUT=$(awk "/OUTPUT/{output=1; next}output==0{next}{print \$0; exit;}" ${CONFIG});
   DISPLAY_EDID=$(awk "/EDID/{edid=1; next}edid==0{next;}/^$/{exit;}{print \$1;}" ${CONFIG} | tr -d "\t\n");
@@ -21,11 +22,14 @@ for CONFIG in $(find "${CONFIG_PATH}" -maxdepth 1 -type f -name "*.cfg" -printf 
   CUSTOM_CMDS=$(awk "/CUSTOM/{custom=1; next;}custom==0{next;}/^$/{exit;}{print \$0;}" ${CONFIG} | tr "\n" ";");
 
   EDID=$(xrandr --props | awk "/${DISPLAY_OUTPUT} connected/{output=1; next;}output==0{next;}/EDID:/{edid=1; next;}edid==0{next;}/[A-Zg-z]/{exit;}{print $1;}" | tr -d "\t\n");
-  [ -z "${EDID}" ] && continue;
 
-  [ "${EDID}" = "${DISPLAY_EDID}" ] && {
-    xrandr --output "${DISPLAY_OUTPUT}" ${DISPLAY_ARGS}
+  [ -n "${EDID}" ] && [ "${EDID}" = "${DISPLAY_EDID}" ] && {
+    xrandr --output "${DISPLAY_OUTPUT}" ${DISPLAY_ARGS};
     eval "${CUSTOM_CMDS}";
+    CONFIGURED_OUTPUTS="${CONFIGURED_OUTPUTS}${CONFIGURED_OUTPUTS:+ }${DISPLAY_OUTPUT}";
+  } || {
+    [ $(expr "${CONFIGURED_OUTPUTS}" : ".*${DISPLAY_OUTPUT}.*") -eq 0 ] && \
+      xrandr --output "${DISPLAY_OUTPUT}" --off;
   }
 done
 
