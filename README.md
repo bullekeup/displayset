@@ -4,7 +4,7 @@ This script loads configurations for displays, from \*.cfg files located in /etc
 
 Runs xrandr with pre-defined args along with custom commands (setting wallpaper or anything else) if matching display EDID on given output is connected.
 
-Comes with an optional udev rule to be launched at each display event (needs displayset to be installed as /usr/bin/displayset). 
+Comes with an optional udev rule to be support monitor hotplug (rule triggered at each drm event, needs displayset to be installed as /usr/bin/displayset). 
 *!! If you have an NVIDIA card, do not forget to activate KMS / modeset if using the proprietary NVIDIA driver as follows, or the udev rule won't work (driver will not trigger events)*
 Add the following line to your nvidia modprobe config file (typically /etc/modprobe.d/nvidia.conf)
 ``` bash
