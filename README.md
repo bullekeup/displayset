@@ -1,4 +1,4 @@
-# displayset - A simple display auto-setup script using xrandr
+# displayset - A simple display auto-setup script tool using xrandr
 
 This script loads configurations for displays, from \*.cfg files located in /etc/displayset/ directory (or the one passed as --cfg-path or -p).
 
