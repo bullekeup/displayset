@@ -13,7 +13,7 @@ You can also add it to your .xinitrc or any other X startup script.
 
 Usefull with tiling / minimalist window managers (i3, awesome, dwm, XMonad, Openbox, etc...)
 
-Config files are loaded in alphanum order, and all that match a given OUTPUT / EDID pair triggers a xrandr command (along with custom commands). They are loaded sequentially : if two config files match same OUTPUT / EDID pair, both trigger commands.
+Config files are loaded in alphanum order, and all that match a given OUTPUT / EDID pair triggers a xrandr command (along with custom commands). They are loaded sequentially : if two config files match same OUTPUT / EDID pair, both trigger commands. If no display matches or a disconnection occurs on a configured OUTPUT, displayset disables it (using xrandr --off arg).
 
 ## Configuration format
 
@@ -42,4 +42,12 @@ Add the following line to your nvidia modprobe config file (typically /etc/modpr
 options nvidia_drm modeset=1
 ```
 The driver name *nvidia_drm* name may change between distros. *nvidia_drm* is the driver name in Arch.
+
+### AUR package
+
+displayset is available on the AUR, search on https://aur.archlinux.org/packages/ or install through an AUR helper (ex: yay -S displayset displayset-udev-rules displayset-doc)
+
+
+
+Feel free to submit PRs for modifications and improvements
 
