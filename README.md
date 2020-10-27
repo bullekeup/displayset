@@ -13,6 +13,8 @@ You can also add it to your .xinitrc or any other X startup script.
 
 Usefull with tiling / minimalist window managers (i3, awesome, dwm, XMonad, Openbox, etc...)
 
+Config files are loaded in alphanum order, and all that match a given OUTPUT / EDID pair triggers a xrandr command (along with custom commands). They are loaded sequentially : if two config files match same OUTPUT / EDID pair, both trigger commands.
+
 ## Configuration format
 
 Configuration is easy : each of the following keys accept a value on the following line(s).
